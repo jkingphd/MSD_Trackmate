@@ -52,8 +52,8 @@ data[:,2] *= 2*scale
 length = 6
 particles = np.unique(data[:,-1])
 f = open(fname.split('.')[0] + '_out.csv', 'w')
-f.write('Track #, Length, dia_fc, dia_msd, dia_msd_error, v_drift, density_fc,\
-        density_msd, density_msd_error\n')
+f.write('Track #, Length, Final_Length, x, y, t, dia_fc, dia_msd,\
+        dia_msd_error, v_drift, density_fc, density_msd, density_msd_error\n')
 for particle in particles:
     print 'Particle %d' % particle
     ## Find all positions for a given run.
@@ -62,6 +62,7 @@ for particle in particles:
     x = data[idx, 0]
     y = data[idx, 1]
     t = data[idx, 3]
+    n_orig = x.size
     ## Determine if particle is stuck or sticks during the run.
     ## If it sticks, truncate the run to the point in time where it sticks.
     a = stick_check(x, y, length = 6, threshold = 0.28)
@@ -111,9 +112,10 @@ for particle in particles:
         density_msd_error = np.abs(calc_density(dia + dia_error, v_drift, eta) - density_msd)
         dia_fc = np.min(dia_fc)
         density_fc = calc_density(dia_fc, v_drift, eta)
-        f.write('%d, %d, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f\n'
-                % (particle, n, dia_fc, dia, dia_error, v_drift, density_fc, 
-                   density_msd, density_msd_error))
+        f.write('%d, %d, %d, %0.3f, %0.3f, %d, %0.3f, %0.3f, %0.3f, %0.3f,\
+                %0.3f, %0.3f, %0.3f\n' % (particle, n_orig, n, x[0], y[0],\
+                t[0], dia_fc, dia, dia_error, v_drift, density_fc,\
+                density_msd, density_msd_error))
     else:
         print 'Track too short.'
 f.close()
