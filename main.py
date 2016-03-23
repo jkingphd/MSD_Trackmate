@@ -74,6 +74,9 @@ for particle in particles:
     ## analysis on runs that equal or exceed nMin.
     n = x.size
     if n >= nMin:
+        x_0 = x[0]/scale
+        y_0 = y[0]/scale
+        t_0 = int(t[0]/dt)
         ## This is specifically for settling experiments. Calculate the
         ## average y-velocity over the entire run.
         v_drift = (y[-1] - y[0])/(t[-1] - t[0])
@@ -105,9 +108,6 @@ for particle in particles:
         dia = calc_dia(np.mean(means/4.), eta, T)
         SE = StandardError(means/4.)
         dia_error = np.abs(calc_dia(np.mean(means/4.) + SE, eta, T) - dia)
-        x_0 = x[0]/scale
-        y_0 = y[0]/scale
-        t_0 = int(t[0]/dt)
         ## Calculate density from both the flowcam-reported diameter (the 
         ## minimum value of all reported diameters for the run) and the 
         ## msd-derived diameter
