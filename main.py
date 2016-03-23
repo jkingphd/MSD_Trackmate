@@ -70,9 +70,6 @@ for particle in particles:
         x = x[:a[0]]
         y = y[:a[0]]
         t = t[:a[0]]
-    x_0 = x[0]/scale
-    y_0 = y[0]/scale
-    t_0 = int(t[0]/dt)
     ## Check the length of the truncated/untruncated run. Only perford msd
     ## analysis on runs that equal or exceed nMin.
     n = x.size
@@ -108,6 +105,9 @@ for particle in particles:
         dia = calc_dia(np.mean(means/4.), eta, T)
         SE = StandardError(means/4.)
         dia_error = np.abs(calc_dia(np.mean(means/4.) + SE, eta, T) - dia)
+        x_0 = x[0]/scale
+        y_0 = y[0]/scale
+        t_0 = int(t[0]/dt)
         ## Calculate density from both the flowcam-reported diameter (the 
         ## minimum value of all reported diameters for the run) and the 
         ## msd-derived diameter
