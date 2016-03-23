@@ -70,6 +70,9 @@ for particle in particles:
         x = x[:a[0]]
         y = y[:a[0]]
         t = t[:a[0]]
+    x_0 = x[0]/scale
+    y_0 = y[0]/scale
+    t_0 = int(t[0]/dt)
     ## Check the length of the truncated/untruncated run. Only perford msd
     ## analysis on runs that equal or exceed nMin.
     n = x.size
@@ -94,9 +97,9 @@ for particle in particles:
         for i in range(xs.shape[0]):
             dx = (xs[i] - xs[i][0])[1:]
             dy = (ys[i] - ys[i][0])[1:]
-            dt = (ts[i] - ts[i][0])[1:]
+            dT = (ts[i] - ts[i][0])[1:]
             dr2 = np.power(dx, 2) + np.power(dy, 2)
-            msd.append(dr2/dt)
+            msd.append(dr2/dT)
         msd = np.array(msd)
         means = []
         for i, row in enumerate(msd):
@@ -113,8 +116,8 @@ for particle in particles:
         dia_fc = np.min(dia_fc)
         density_fc = calc_density(dia_fc, v_drift, eta)
         f.write('%d, %d, %d, %0.3f, %0.3f, %d, %0.3f, %0.3f, %0.3f, %0.3f,\
-                %0.3f, %0.3f, %0.3f\n' % (particle, n_orig, n, x[0], y[0],\
-                t[0], dia_fc, dia, dia_error, v_drift, density_fc,\
+                %0.3f, %0.3f, %0.3f\n' % (particle, n_orig, n, x_0, y_0,\
+                t_0, dia_fc, dia, dia_error, v_drift, density_fc,\
                 density_msd, density_msd_error))
     else:
         print 'Track too short.'
